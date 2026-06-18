@@ -1,50 +1,48 @@
----
+﻿---
 name: stock-expert-email
-description: Run a full US and Taiwan stock market analysis and send the result as a rich Traditional Chinese HTML email via Gmail SMTP (no Chrome required). Use this skill when the user says "send me the stock report by email", "stock expert email", "幫我把股票分析寄到信箱", or any variation of wanting stock analysis delivered to their email.
+description: Run a full US and Taiwan stock market analysis and send the result as a rich Traditional Chinese HTML email via Gmail SMTP (no Chrome required). Use this skill when the user says "send me the stock report by email", "stock expert email", "撟急??蟡典????唬縑蝞?, or any variation of wanting stock analysis delivered to their email.
 ---
 
 # Stock Expert Email
 
-Fetch the latest US and Taiwan stock market data, build a full Traditional Chinese HTML analysis report, and send it to jimmy6409444@gmail.com via Gmail SMTP — no Chrome required.
+Fetch the latest US and Taiwan stock market data, build a full Traditional Chinese HTML analysis report, and send it to jimmy6409444@gmail.com, applerain152@gmail.com via Gmail SMTP ??no Chrome required.
 
 ---
 
-## Step 1 — Fetch latest data (run all searches in parallel)
+## Step 1 ??Fetch latest data (run all searches in parallel)
 
 - `US stock market S&P 500 Nasdaq latest news today [current date]`
-- `台股 加權指數 台積電 最新 [current date]`
+- `?啗 ??? ?啁??????[current date]`
 - `Fed interest rate CPI inflation latest [current month year]`
 - `TSMC TSM earnings revenue outlook latest [current month year]`
 - `NVIDIA MSFT AI capex spending latest news [current month year]`
 
-Extract: Fed funds rate, US CPI, S&P 500 & Nasdaq levels, TAIEX level, TSMC stock price + revenue/net income YoY, AI capex totals, 3–5 major market-moving headlines.
+Extract: Fed funds rate, US CPI, S&P 500 & Nasdaq levels, TAIEX level, TSMC stock price + revenue/net income YoY, AI capex totals, 3?? major market-moving headlines.
 
 ---
 
-## Step 2 — Build HTML email body (繁體中文, inline styles only)
+## Step 2 ??Build HTML email body (蝜?銝剜?, inline styles only)
 
 Compose a complete HTML string in `$htmlBody` with ALL text in Traditional Chinese. Use only inline CSS styles (no `<style>` blocks). Include these sections:
 
-1. **Header** — gradient blue background, date + "美股台股分析報告" title + subtitle
-2. **重大最新事件** — blue left-border strip, 3–5 bullet headlines
-3. **關鍵總體經濟指標** — 8 metric cards in a 4-column table:
-   聯準會利率, 美國CPI年增, 那斯達克, 加權指數, 台積電股價, 台積電淨利YoY, TSMC營收YoY, AI資本支出
-4. **市場訊號** — 2-column table side by side:
-   - 🇺🇸 美股：AI資本支出, 通膨, 聯準會政策, 地緣政治
-   - 🇹🇼 台股：加權指數趨勢, 台積電營收, AI需求, 集中度風險
-   - Badge colors: 看多 bg #d1fae5 text #065f46 | 偏高/鷹派 bg #fef3c7 text #92400e | 風險 bg #fee2e2 text #991b1b
-5. **美股精選** — 6 cards (2-col): NVDA, MSFT, AVGO, NOW, VST, AMD
-   Each card: ticker | sector, company name, 2-sentence thesis, rating (▲重點關注 #059669 / —觀察 #b45309 / ▼謹慎 #dc2626)
-6. **台股精選** — 6 cards (2-col): 台積電(2330), 聯發科(2454), 鴻海(2317), 日月光(3711), 台達電(2308), 聯電(2303)
-7. **主要風險** — 3 amber cards: 貨幣政策, 市場集中度, AI週期
-8. **下半年展望** — 3 border cards: AI資本支出, 利率環境, 地緣政治
-9. **免責聲明** — gray footer: 本報告僅供參考，不構成任何投資建議。
-
+1. **Header** ??gradient blue background, date + "蝢?啗???勗?" title + subtitle
+2. **?之??唬?隞?* ??blue left-border strip, 3?? bullet headlines
+3. **?蝮賡?蝬???** ??8 metric cards in a 4-column table:
+   ?舀???? 蝢?CPI撟游?, ????, ???, ?啁??餉?? ?啁??餅楊?坡oY, TSMC?YoY, AI鞈?臬
+4. **撣閮?** ??2-column table side by side:
+   - ?? 蝢嚗I鞈?臬, ?, ?舀??蝑? ?啁楠?踵祥
+   - ?? ?啗嚗?甈??貉隅?? ?啁??餌??? AI?瘙? ?葉摨阡◢??   - Badge colors: ?? bg #d1fae5 text #065f46 | ??/曋寞晷 bg #fef3c7 text #92400e | 憸券 bg #fee2e2 text #991b1b
+5. **蝢蝎暸** ??6 cards (2-col): NVDA, MSFT, AVGO, NOW, VST, AMD
+   Each card: ticker | sector, company name, 2-sentence thesis, rating (?脤?暺?瘜?#059669 / ??撖?#b45309 / ?潸牲??#dc2626)
+6. **?啗蝎暸** ??6 cards (2-col): ?啁???2330), ?舐蝘?2454), 暾餅絲(2317), ?交???3711), ?圈???2308), ?舫(2303)
+7. **銝餉?憸券** ??3 amber cards: 鞎典馳?輻?, 撣?葉摨? AI?望?
+8. **銝?撟游???* ??3 border cards: AI鞈?臬, ?拍??啣?, ?啁楠?踵祥
+9. **?痊?脫?** ??gray footer: ?砍??靘???銝??遙雿?鞈遣霅啜?
 ---
 
-## Step 3 — Send via .NET SmtpClient with UTF-8
+## Step 3 ??Send via .NET SmtpClient with UTF-8
 
-**CRITICAL: Use `System.Net.Mail.SmtpClient` — NOT `Send-MailMessage`.**
+**CRITICAL: Use `System.Net.Mail.SmtpClient` ??NOT `Send-MailMessage`.**
 `Send-MailMessage` uses Windows-1252 encoding and will turn all Chinese characters into question marks.
 
 ```powershell
@@ -52,7 +50,7 @@ $cfg = Get-Content "C:\Users\Jimmy\.claude\email-config\gmail.json" | ConvertFro
 $pass = ConvertTo-SecureString $cfg.appPassword -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential($cfg.from, $pass)
 $today = Get-Date -Format 'yyyy/MM/dd HH:mm'
-$subject = "📊 美股台股分析報告 — $today"
+$subject = "?? 蝢?啗???勗? ??$today"
 
 $msg = New-Object System.Net.Mail.MailMessage
 $msg.From = $cfg.from
@@ -78,7 +76,7 @@ Reusable script: `C:\Users\Jimmy\.claude\email-config\Send-StockEmail.ps1` (alre
 ---
 
 ## Success criteria
-- Email delivered to jimmy6409444@gmail.com
+- Email delivered to jimmy6409444@gmail.com, applerain152@gmail.com
 - Subject contains today's date
 - All Chinese characters display correctly (no question marks)
 - All 9 sections present in Traditional Chinese with latest search data
@@ -88,6 +86,7 @@ Reusable script: `C:\Users\Jimmy\.claude\email-config\Send-StockEmail.ps1` (alre
 ## Trigger phrases
 - "send me the stock report by email"
 - "stock expert email"
-- "幫我把股票分析寄到信箱"
+- "撟急??蟡典????唬縑蝞?
 - "email me the stock analysis"
-- "寄股票報告給我"
+- "撖蟡典?策??
+
